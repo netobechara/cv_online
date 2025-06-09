@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamil Bechara Neto - Analista de Dados & BI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- 
+        Chosen Palette: Data Storage (Background: #1C2128, Text: #E0E6EB, Primary Accent: #00E676, Secondary Accent: #4DB6AC, Component Background: #2B323C) 
+    -->
+    <!-- 
+        Application Structure Plan: The SPA maintains its top-down narrative flow, optimized for a recruiter's exploration. The sticky navigation at the top provides quick jumps to 'Sobre', 'Habilidades', 'Experiência', 'Projetos', 'Formação', and 'Contato'. This structure allows for both linear progression and direct access to specific information. The "Data Storage" theme is integrated visually to enhance the professional image, with a dark, technical aesthetic. The interactive skills chart and the timeline structure are retained as they are highly effective for engaging users and presenting information clearly, now with a new visual language. New sections for 'Projetos' and 'Contato' are added to provide a more comprehensive and interactive professional profile.
+    -->
+    <!-- 
+        Visualization & Content Choices: 
+        - Professional Summary -> 'Sobre' Section: Goal is to inform and create a personal connection. A text block is used, now with a dark background and light text, aligned with the data storage theme for a high-tech feel.
+        - Skills/Tools -> Horizontal Bar Chart (Chart.js): Goal is to compare proficiency levels visually. The horizontal bar chart offers intuitive direct comparison. It's ordered from advanced to basic for immediate impact. The chart's colors (bars, labels, grid) are updated to reflect the new dark theme, using the vibrant green accent for data visualization.
+        - Experience -> Vertical Timeline (HTML/Tailwind): Goal is to show career progression. The timeline provides a clear chronological path. Its design is visually updated with darker cards, accented border lines, and glowing dots, emphasizing a data flow/circuitry aesthetic.
+        - Projects -> Placeholder Section (HTML/Tailwind): Goal is to anticipate future work and encourage practical application. A text block clearly indicates where future projects will be displayed, motivating the user to create them.
+        - Education/Courses -> Styled Cards (HTML/Tailwind): Goal is to inform clearly. Structured cards are used, now with darker backgrounds, subtle glow effects, and borders that align with the data storage theme.
+        - Contact Form -> Form (HTML/Tailwind + Formspree): Goal is to facilitate direct communication. A standard HTML form is implemented, configured to send data via Formspree, fitting the dark theme.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1C2128; /* Dark base background */
+            color: #E0E6EB; /* Light text for contrast */
+            line-height: 1.6;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 380px;
+            max-height: 500px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            left: -2.3rem;
+            top: 0.8rem;
+            background-color: #00E676; /* Primary accent color (LED green) */
+            border: 4px solid #1C2128; /* Matches body background for "cut-out" effect */
+            box-shadow: 0 0 10px #00E676, 0 0 5px #00E676; /* Subtle glow */
+        }
+        .timeline-line {
+            position: absolute;
+            left: 0.9rem;
+            width: 4px;
+            background-color: #4DB6AC; /* Secondary accent color (teal for subtle lines) */
+            height: 100%;
+            box-shadow: 0 0 5px rgba(77, 182, 172, 0.5); /* Subtle glow for the line */
+        }
+        .card-bg {
+            background-color: #2B323C; /* Slightly lighter dark background for cards */
+        }
+        .accent-text {
+            color: #00E676; /* Primary accent text */
+        }
+        .secondary-accent-text {
+            color: #4DB6AC; /* Secondary accent text */
+        }
+        .border-accent {
+            border-color: #00E676; /* Border color for primary accent */
+        }
+        .hover-accent:hover {
+            color: #00E676; /* Hover color for primary accent */
+        }
+        .shadow-accent {
+            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.2); /* Soft shadow with accent color */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="home" class="p-4 md:p-6 sticky top-0 z-50 bg-[#1C2128]/90 backdrop-blur-md shadow-xl rounded-b-xl border-b border-[#00E676] transition-all duration-300 ease-in-out">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl md:text-3xl font-extrabold accent-text tracking-tight">Jamil Bechara Neto</h1>
+            <nav class="hidden md:flex space-x-8 text-lg font-medium items-center">
+                <a href="#sobre" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Sobre</a>
+                <a href="#habilidades" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Habilidades</a>
+                <a href="#experiencia" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Experiência</a>
+                <a href="#projetos" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Projetos</a>
+                <a href="#formacao" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Formação</a>
+                <a href="#contato" class="text-gray-300 hover-accent transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#00E676] after:transition-all after:duration-300 hover:after:w-full">Contato</a>
+                <a href="jamil_neto_cv.pdf" target="_blank" class="ml-6 px-4 py-2 bg-[#00E676] text-[#1C2128] font-bold rounded-lg shadow-md hover:bg-[#4DB6AC] transition-colors duration-300 transform hover:scale-105">Baixar CV (PDF)</a>
+            </nav>
+            <div class="md:hidden">
+                <!-- Mobile menu icon -->
+                <button class="accent-text text-2xl">&#9776;</button> 
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 md:p-10 max-w-6xl">
+        
+        <!-- Sobre Section -->
+        <section id="sobre" class="py-20 md:py-32 text-center card-bg rounded-xl shadow-lg mb-16 px-6 border border-[#2B323C] shadow-accent">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-6 accent-text leading-tight">Analista de Dados</h2>
+            <div class="max-w-3xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed">
+                <p>
+                    Profissional com experiência em <strong>análise de dados, criação de dashboards e automação de processos operacionais</strong>, focado na qualidade e eficiência. Minha capacidade de <strong>coleta, interpretação e análise de dados</strong> se traduz em <strong>insights acionáveis</strong> que apoiam a tomada de decisões estratégicas e otimizam processos em ambientes corporativos dinâmicos.
+                </p>
+            </div>
+        </section>
+
+        <!-- Habilidades Section -->
+        <section id="habilidades" class="py-16 md:py-24 card-bg rounded-xl shadow-lg mb-16 px-6 border border-[#2B323C] shadow-accent">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold accent-text">Habilidades Técnicas</h2>
+                <p class="text-lg text-gray-400 mt-2">Um panorama visual das minhas competências em ferramentas de dados, ordenadas por proficiência.</p>
+            </div>
+            <div class="chart-container bg-gray-900 p-6 rounded-lg shadow-inner border border-gray-700">
+                <canvas id="skillsChart"></canvas>
+            </div>
+            <div class="text-center mt-8 text-gray-400 text-base md:text-lg">
+                <p>Tenho convivência com o universo <span class="font-semibold accent-text">Google Big Query</span> e <span class="font-semibold accent-text">Google Cloud</span>, e está no meu cronograma de estudos a obtenção de certificações na área, reforçando meu compromisso com o aprimoramento contínuo em tecnologias de nuvem.</p>
+            </div>
+        </section>
+
+        <!-- Experiência Section -->
+        <section id="experiencia" class="py-16 md:py-24 mb-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold accent-text">Experiência Profissional</h2>
+                <p class="text-lg text-gray-400 mt-2">Minha trajetória e contribuições em cada função.</p>
+            </div>
+            <div class="relative max-w-2xl mx-auto pl-10 md:pl-12">
+                <div class="timeline-line"></div>
+                
+                <div class="mb-12 relative timeline-item">
+                    <div class="card-bg p-6 md:p-8 rounded-xl shadow-lg border-l-4 border-[#00E676] hover:shadow-xl transition-shadow duration-300 shadow-accent">
+                        <p class="text-sm font-semibold text-gray-400 mb-2">Janeiro/2023 – Atual</p>
+                        <h3 class="text-2xl md:text-3xl font-bold mt-1 accent-text">Assistente de Qualidade Operacional</h3>
+                        <p class="text-lg font-medium text-gray-300 mb-4">ESTAPAR</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-base md:text-lg">
+                            <li>Atuação na <strong>coleta e análise de dados operacionais</strong> para identificar tendências e pontos de melhoria na qualidade.</li>
+                            <li>Desenvolvimento de <strong>dashboards interativos e relatórios automatizados</strong> em Power BI, Looker Studio e Excel, fornecendo <strong>métricas e indicadores</strong> para acompanhamento da performance.</li>
+                            <li>Implementação de <strong>scripts em Python e Google Apps Script</strong> para automação de tarefas e <strong>redução de retrabalho</strong>.</li>
+                            <li>Apoio em auditorias internas, participação ativa na <strong>definição de KPIs</strong> e na <strong>revisão de processos</strong> para otimização contínua.</li>
+                            <li><strong>Colaboração ativa com equipes técnicas e áreas de negócio</strong> para levantamento de requisitos e proposição de <strong>soluções analíticas baseadas em dados</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-12 relative timeline-item">
+                    <div class="card-bg p-6 md:p-8 rounded-xl shadow-lg border-l-4 border-[#4DB6AC] hover:shadow-xl transition-shadow duration-300">
+                        <p class="text-sm font-semibold text-gray-400 mb-2">Outubro/2021 – Dezembro/2022</p>
+                        <h3 class="text-2xl md:text-3xl font-bold mt-1 accent-text">Jovem Aprendiz</h3>
+                        <p class="text-lg font-medium text-gray-300 mb-4">ESTAPAR</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-base md:text-lg">
+                            <li><strong>Consolidação e organização de dados operacionais</strong>, com foco na atualização de planilhas e <strong>extração de indicadores</strong> de controle.</li>
+                            <li>Participação na elaboração de <strong>relatórios de controle de qualidade</strong> e em treinamentos internos sobre processos.</li>
+                            <li>Iniciação em <strong>ferramentas de Business Intelligence</strong>, obtendo os primeiros contatos com <strong>modelagem e visualização de dados</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Projetos Section -->
+        <section id="projetos" class="py-16 md:py-24 card-bg rounded-xl shadow-lg mb-16 px-6 border border-[#2B323C] shadow-accent">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold accent-text">Meus Projetos</h2>
+                <p class="text-lg text-gray-400 mt-2">Nesta seção, você encontrará exemplos práticos do meu trabalho e minha capacidade de resolver problemas através da análise de dados.</p>
+            </div>
+            <div class="max-w-3xl mx-auto text-center py-10 border border-dashed border-gray-700 rounded-lg text-gray-500">
+                <p class="text-xl md:text-2xl mb-4">✨ Em breve: Meus projetos de Análise de Dados e BI serão adicionados aqui! ✨</p>
+                <p class="text-lg">Estou sempre buscando novas oportunidades para aplicar minhas habilidades. Se você tiver um desafio interessante, vamos conversar!</p>
+            </div>
+            <!-- Futuros projetos podem ser adicionados aqui, cada um com sua descrição, tecnologias e links. -->
+        </section>
+
+        <!-- Formação Section -->
+        <section id="formacao" class="py-16 md:py-24 card-bg rounded-xl shadow-lg mb-24 px-6 border border-[#2B323C] shadow-accent">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold accent-text">Formação & Cursos</h2>
+                <p class="text-lg text-gray-400 mt-2">Minha base acadêmica e aprendizado contínuo.</p>
+            </div>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="text-xl md:text-2xl font-bold accent-text">Ciência da Computação</h3>
+                    <p class="text-lg font-medium text-gray-300">UNICID</p>
+                    <p class="text-gray-400">2021 - 2025 (previsão de conclusão)</p>
+                </div>
+                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="text-xl md:text-2xl font-bold accent-text">SQL para Análise de Dados</h3>
+                    <p class="text-lg font-medium text-gray-300">Udemy</p>
+                    <p class="text-gray-400">Curso extracurricular focado em consultas e manipulação de dados.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contato Section -->
+        <section id="contato" class="py-16 md:py-24 card-bg rounded-xl shadow-lg px-6 border border-[#2B323C] shadow-accent">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold accent-text">Entre em Contato</h2>
+                <p class="text-lg text-gray-400 mt-2">Gostaria de discutir uma oportunidade ou apenas bater um papo? Envie uma mensagem!</p>
+            </div>
+            <form action="https://formspree.io/f/mvgrkbjw" method="POST" class="max-w-md mx-auto space-y-6">
+                <div class="relative z-0 w-full mb-6 group">
+                    <input type="text" name="name" id="name" class="block py-2.5 px-0 w-full text-lg text-gray-200 bg-transparent border-0 border-b-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-[#00E676] peer" placeholder=" " required />
+                    <label for="name" class="peer-focus:font-medium absolute text-lg text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#00E676] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Seu Nome</label>
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
+                    <input type="email" name="email" id="email" class="block py-2.5 px-0 w-full text-lg text-gray-200 bg-transparent border-0 border-b-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-[#00E676] peer" placeholder=" " required />
+                    <label for="email" class="peer-focus:font-medium absolute text-lg text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#00E676] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Seu E-mail</label>
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
+                    <textarea name="message" id="message" rows="4" class="block py-2.5 px-0 w-full text-lg text-gray-200 bg-transparent border-0 border-b-2 border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-[#00E676] peer" placeholder=" " required></textarea>
+                    <label for="message" class="peer-focus:font-medium absolute text-lg text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#00E676] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Sua Mensagem</label>
+                </div>
+                <button type="submit" class="w-full px-6 py-3 bg-[#00E676] text-[#1C2128] font-bold rounded-lg shadow-md hover:bg-[#4DB6AC] transition-colors duration-300 transform hover:scale-105">Enviar Mensagem</button>
+            </form>
+            <!-- <p class="text-center text-sm text-gray-500 mt-4">
+                Este formulário utiliza <a href="https://formspree.io/" target="_blank" rel="noopener noreferrer" class="hover-accent underline">Formspree</a> para enviar e-mails. Por favor, <strong>substitua "YOUR_FORMSPREE_ENDPOINT" no código</strong> pelo seu endpoint Formspree.
+            </p> -->
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#101317] text-white py-12 rounded-t-xl border-t border-[#00E676]">
+        <div class="container mx-auto text-center">
+            <h3 class="text-2xl md:text-3xl font-bold mb-4 accent-text">Vamos nos conectar?</h3>
+            <p class="text-lg mb-8 max-w-xl mx-auto opacity-90 text-gray-400">Estou aberto a novas oportunidades e colaborações. Sinta-se à vontade para entrar em contato.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-lg">
+                <a href="mailto:azevedojoaogoncalves@gmail.com" class="hover-accent transition-colors text-gray-300">
+                    <span class="inline-block align-middle mr-2">📧</span> neto.jamil@gmail.com
+                </a>
+                <a href="https://www.linkedin.com/in/jamil-neto/" target="_blank" rel="noopener noreferrer" class="hover-accent transition-colors text-gray-300">
+                    <span class="inline-block align-middle mr-2">🔗</span> LinkedIn
+                </a>
+                <a href="tel:+5511974200034" class="hover-accent transition-colors text-gray-300">
+                    <span class="inline-block align-middle mr-2">📱</span> (11) 98577-1677
+                </a>
+                <a href="jamil_neto_cv.pdf" target="_blank" class="md:ml-6 px-4 py-2 bg-[#00E676] text-[#1C2128] font-bold rounded-lg shadow-md hover:bg-[#4DB6AC] transition-colors duration-300 transform hover:scale-105">Baixar CV (PDF)</a>
+            </div>
+            <p class="mt-10 text-sm text-gray-600">&copy; 2025, Jamil Bechara Neto. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            
+            const skills = [
+                { label: 'Google Sheets', level: 4 },
+                { label: 'Looker Studio', level: 4 },
+                { label: 'Excel', level: 3 },
+                { label: 'Power BI', level: 3 },
+                { label: 'Python', level: 2 },
+                { label: 'SQL', level: 3 },
+                { label: 'Google Apps Script', level: 2 },
+                // { label: 'Google Big Query', level: 2 },
+                // { label: 'Google Cloud', level: 1 },
+                // { label: 'HTML/CSS', level: 2 },
+                // { label: 'JavaScript', level: 1 },
+                { label: 'RPA (Robotic Process Automation)', level: 2 }
+            ];
+
+            skills.sort((a, b) => b.level - a.level);
+
+            const skillLabels = skills.map(s => s.label);
+            const skillData = skills.map(s => s.level);
+
+            const getSkillLevelText = (value) => {
+                const labels = ['Iniciante', 'Básico', 'Intermediário', 'Avançado', 'Especialista'];
+                return labels[Math.max(0, Math.min(labels.length - 1, value - 1))] || 'N/A';
+            };
+
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: skillLabels,
+                    datasets: [{
+                        label: 'Nível de Proficiência',
+                        data: skillData,
+                        backgroundColor: '#00E676', /* Primary accent color for bars */
+                        borderColor: '#4DB6AC', /* Secondary accent color for bar borders */
+                        borderWidth: 1,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return getSkillLevelText(value);
+                                },
+                                color: '#E0E6EB',
+                                font: {
+                                    family: 'Inter, sans-serif',
+                                    size: 13,
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(77, 182, 172, 0.2)',
+                                drawBorder: false,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Nível de Proficiência',
+                                color: '#E0E6EB',
+                                font: {
+                                    family: 'Inter, sans-serif',
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#E0E6EB',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif',
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            },
+                            barThickness: 20,
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(43, 50, 60, 0.9)',
+                            titleFont: {
+                                size: 16,
+                                family: 'Inter, sans-serif',
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: 'Inter, sans-serif',
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += getSkillLevelText(context.parsed.x);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
